@@ -1,4 +1,4 @@
-class Api::V1::DesignersController < ApplicationController
+class Api::V1::Users::DesignersController < ApplicationController
   before_action :authenticate_user!
 
   def index
@@ -23,17 +23,7 @@ class Api::V1::DesignersController < ApplicationController
     end
   end
 
-  def update
-    designer = Designer.find(params[:id])
-
-    if designer.update(designer_params)
-      render json: designer
-    else
-      render json: designer.errors, status: 400
-    end
-  end
-
-  private
+ private 
 
   def designer_params
     params.require(:designer).permit(:company, :contact, :phone, :email, :user_id)
