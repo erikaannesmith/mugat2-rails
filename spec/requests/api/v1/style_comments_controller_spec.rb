@@ -6,7 +6,7 @@ describe "Style Comments API" do
     Designer.destroy_all
     Style.destroy_all
     StyleComment.destroy_all
-    @user = User.create(name: "Erika")
+    @user = User.create(email: "Erika")
     @novella_royalle = Designer.create(company: "Novella Royalle", 
                                        contact: "Elaina", 
                                        phone: "3135508645", 
@@ -31,7 +31,7 @@ describe "Style Comments API" do
 
   describe "#index" do
     it "returns all styles comments associated with a style" do
-      get "/api/v1/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments"
+      get "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments"
 
       json = JSON.parse(response.body)
 
@@ -43,7 +43,7 @@ describe "Style Comments API" do
   describe "#create" do
     context "valid attributes" do
       it "creates a new instance of a style comment" do
-        post "/api/v1/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments", params: {style_comment: {date: Date.new,
+        post "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments", params: {style_comment: {date: Date.new,
                                                                                                                                 body: "Here is a new comment.",
                                                                                                                                 style_id: @jasmine_jumpsuit.id}}
         
@@ -57,7 +57,7 @@ describe "Style Comments API" do
 
     context "invalid attributes" do
       it "returns an error message" do
-        post "/api/v1/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments", params: {style_comment: {date: Date.new,
+        post "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments", params: {style_comment: {date: Date.new,
                                                                                                                                 style_id: @jasmine_jumpsuit.id}}
         
         expect(response.status).to eq(400)
@@ -68,7 +68,7 @@ describe "Style Comments API" do
   describe "#destroy" do
     context "valid style comment" do
       it "destroys the style comment" do
-        delete "/api/v1/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments/#{@comment_1.id}"
+        delete "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments/#{@comment_1.id}"
 
         expect(response).to be_success
         expect(response.body).to eq("")
@@ -81,7 +81,7 @@ describe "Style Comments API" do
 
     context "invalid style comment" do
       it "returns an error message" do
-        delete "/api/v1/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments/#{@comment_3.id}"
+        delete "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/styles/#{@jasmine_jumpsuit.id}/style_comments/#{@comment_3.id}"
 
         expect(response.status).to eq(404)
       end

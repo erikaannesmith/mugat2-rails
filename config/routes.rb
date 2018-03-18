@@ -8,14 +8,17 @@ Rails.application.routes.draw do
         get '/:id/designers', to: 'designers#index'
         post '/:id/designers', to: 'designers#create'
         get '/:id/designers/:designer_id', to: 'designers#show'
+        patch '/:id/designers/:designer_id', to: 'designers#update'
+      end
+      resources :users do
+        resources :designers do
+          resources :styles do
+            resources :style_comments
+          end
+          resources :designer_comments
+        end
       end
       post 'auth', to: 'users#create'
-      resources :designers do
-        resources :styles do
-          resources :style_comments
-        end
-        resources :designer_comments
-      end
     end
   end
 end

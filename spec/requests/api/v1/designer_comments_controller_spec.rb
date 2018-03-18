@@ -5,7 +5,7 @@ describe "Designer Comments API" do
   before :each do
     Designer.destroy_all
     DesignerComment.destroy_all
-    @user = User.create(name: "Erika")
+    @user = User.create(email: "Erika")
     @novella_royalle = Designer.create(company: "Novella Royalle", 
                                        contact: "Elaina", 
                                        phone: "3135508645", 
@@ -29,7 +29,7 @@ describe "Designer Comments API" do
 
   describe "#index" do
     it "returns all designer comments associated with a designer" do
-      get "/api/v1/designers/#{@novella_royalle.id}/designer_comments"
+      get "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/designer_comments"
 
       json = JSON.parse(response.body)
 
@@ -41,7 +41,7 @@ describe "Designer Comments API" do
   describe "#create" do
     context "valid attributes" do
       it "creates a new instance of a designer comment" do
-        post "/api/v1/designers/#{@novella_royalle.id}/designer_comments", params: {designer_comment: {date: Date.new,
+        post "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/designer_comments", params: {designer_comment: {date: Date.new,
                                                                                                        body: "Here is a new comment.",
                                                                                                        designer_id: @novella_royalle.id}}
 
@@ -55,7 +55,7 @@ describe "Designer Comments API" do
 
     context "invalid attributes" do
       it "returns an error message" do
-        post "/api/v1/designers/#{@novella_royalle.id}/designer_comments", params: {designer_comment: {date: Date.new,
+        post "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/designer_comments", params: {designer_comment: {date: Date.new,
                                                                                                        designer_id: @novella_royalle.id}}
 
         expect(response.status).to eq(400)
@@ -67,7 +67,7 @@ describe "Designer Comments API" do
   describe "#destroy" do
     context "valid designer comment" do
       it "destroys the designer comment" do
-        delete "/api/v1/designers/#{@novella_royalle.id}/designer_comments/#{@comment_1.id}"
+        delete "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/designer_comments/#{@comment_1.id}"
 
         expect(response).to be_success
         expect(response.body).to eq("")
@@ -80,11 +80,10 @@ describe "Designer Comments API" do
 
     context "invalid designer comment" do
       it "returns an error message" do
-        delete "/api/v1/designers/#{@novella_royalle.id}/designer_comments/#{@comment_3.id}"
+        delete "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}/designer_comments/#{@comment_3.id}"
 
         expect(response.status).to eq(404)
       end
     end
   end
-
 end

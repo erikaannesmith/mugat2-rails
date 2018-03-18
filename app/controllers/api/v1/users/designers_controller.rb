@@ -6,7 +6,7 @@ class Api::V1::Users::DesignersController < ApplicationController
   end
 
   def show
-    designer = Designer.find_by(id: params[:id])
+    designer = Designer.find_by(id: params[:designer_id], user_id: params[:id])
     if designer
       render json: designer
     else
@@ -17,6 +17,16 @@ class Api::V1::Users::DesignersController < ApplicationController
   def create
     designer = Designer.new(designer_params)
     if designer.save
+      render json: designer
+    else
+      render json: designer.errors, status: 400
+    end
+  end
+
+  def update
+    designer = Designer.find(params[:designer_id])
+
+    if designer.update(designer_params)
       render json: designer
     else
       render json: designer.errors, status: 400

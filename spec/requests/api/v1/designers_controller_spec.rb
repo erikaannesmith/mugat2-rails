@@ -3,7 +3,7 @@ require 'rails_helper'
 describe "Designers API" do
   before :each do 
     Designer.destroy_all
-    @user = User.create(name: "Erika")
+    @user = User.create(email: "Erika")
     @novella_royalle = Designer.create(company: "Novella Royalle", 
                                        contact: "Elaina", 
                                        phone: "3135508645", 
@@ -18,7 +18,7 @@ describe "Designers API" do
 
   describe "#index" do
     it "returns all designers" do
-      get '/api/v1/designers'
+      get "/api/v1/users/#{@user.id}/designers"
 
       json = JSON.parse(response.body)
 
@@ -30,8 +30,7 @@ describe "Designers API" do
   describe "#show" do
     context "valid designer" do
       it "returns an individual designer" do
-        get "/api/v1/designers/#{@novella_royalle.id}"
-
+        get "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}"
         json = JSON.parse(response.body)
 
         expect(response).to be_success
@@ -41,7 +40,7 @@ describe "Designers API" do
 
     context "invalid designer" do
       it "returns an error message" do
-        get "/api/v1/designers/x"
+        get "/api/v1/users/#{@user.id}/designers/x"
         
         json = JSON.parse(response.body)
 
@@ -53,7 +52,7 @@ describe "Designers API" do
   describe "#create" do
     context "valid attributes" do
       it "creates a new instance of a designer" do
-        post "/api/v1/designers", params: {designer: {company: "Stone Cold Fox",
+        post "/api/v1/users/#{@user.id}/designers", params: {designer: {company: "Stone Cold Fox",
                                                       contact: "Frankie",
                                                       phone: "5862432244",
                                                       email: "frankie@frankie.com",
@@ -69,7 +68,7 @@ describe "Designers API" do
 
     context "invalid attributes" do
       it "will return an error message" do
-        post "/api/v1/designers", params: {designer: {company: "Stone Cold Fox",
+        post "/api/v1/users/#{@user.id}/designers", params: {designer: {company: "Stone Cold Fox",
                                                       contact: "Frankie",
                                                       user_id: @user.id}}
         
@@ -81,12 +80,12 @@ describe "Designers API" do
   describe "#update" do
     context "valid attributes" do
       it "updates the designer" do
-        patch "/api/v1/designers/#{@novella_royalle.id}", params: {designer: {company: "Novella Royalle",
+        patch "/api/v1/users/#{@user.id}/designers/#{@novella_royalle.id}", params: {designer: {company: "Novella Royalle",
                                                                               contact: "Elaina",
                                                                               phone: "5867816012",
                                                                               email: "elaina@elaina.com",
                                                                               user_id: @user.id}}
-      
+
         designer = Designer.find(@novella_royalle.id)
         expect(designer.company).to eq("Novella Royalle")
         expect(designer.phone).to eq("5867816012")
